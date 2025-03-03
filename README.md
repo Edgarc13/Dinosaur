@@ -1,5 +1,5 @@
-# Dinsosaur Run
-This map is created to showcase a 5 mile run that is both a challenge as much as it aesthetically appealing to run
+# Dinosaur Run
+This map is created to showcase a 5-mile run that is as much a challenge as aesthetically appealing to show off on Strava
 
 (https://edgarc13.github.io/dinosaur/)
 
