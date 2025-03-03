@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset=utf-8 />
+	<title>Dinosaur Run</title>
+	<meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.css" />
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.1/dist/leaflet.css" />
+	<link href="https://fonts.googleapis.com/css?family=Noto+Sans" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Lora" rel="stylesheet">
+
+	<style>
+		body {
+			margin: 0;
+			padding: 0;
+			background: "whitesmoke";
+			font-family: "Noto Sans", sans-serif;
+			color: #3d3d3d;
+		}
+
+		h1 {
+			position: absolute;
+			margin-top: 0;
+			top: 10px;
+			left: 45px;
+			font-size: 2em;
+			font-family: "Lora", serif;
+			letter-spacing: .04em;
+			padding: 10px 15px;
+			background: rgba(256, 256, 256);
+			border: 1px solid grey;
+			border-radius: 3px;
+			z-index: 800;
+		}
+
+		h2 {
+			font-family: "Lora", serif;
+			letter-spacing: .04em;
+		}
+
+		#map {
+			position: absolute;
+			top: 0;
+			bottom: 0;
+			width: 100%;
+		}
+
+		section {
+			position: absolute;
+			bottom: 0;
+			left: 10px;
+			width: 280px;
+			margin: 20px auto;
+			padding: 0 15px;
+			background: rgba(256, 256, 256);
+			border: 1px solid grey;
+			border-radius: 3px;
+			z-index: 800;
+		}
+
+		p {
+			font-size: .9em;
+			line-height: 1.5em;
+		}
+
+		a {
+			color: #005daa;
+			text-decoration: none;
+		}
+
+		a:hover {
+			text-decoration: underline;
+		}
+	</style>
+</head>
+
+<body>
+
+	<h1>Dinosaur Run</h1>
+
+	<div id='map'></div>
+
+	<section>
+		<h2>about this map</h2>
+
+		<p>This 5 mile loop starts at Bass Lake before swiftly going into some elevation and switchbacks. Off the dinosaurs head, you can take a slight detour to an overlook! After running through some beautiful neighborhoods you'll find yourself on Main St. One last section along 221 brings you back to Bass Lake.  </p>
+
+		<p>This is perfect for anyone who wants to run through a beautiful part of Blowing Rock. While it is primarily tails the long distance and elevation changes can be a nice challenge for intermediate runners. 
+		</p>
+
+		<p><a href = https://www.exploreboone.com/outdoors/hiking/bass-lake/ > Bass Lake Trailhead </a> </p>
+		<p>Edgar Castillo-Ramos</p>
+
+	</section>
+
+	<script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
+	<script src="https://unpkg.com/leaflet@1.0.1/dist/leaflet.js"></script>
+
+	<script src="dino.js"></script>
+
+	<script>
+
+
+//options to be used when creating the map
+		var options = {
+			center: [36.1331695,-81.6840081],
+			zoom: 15
+		}
+
+//creation of the Leaflet map
+		var map = L.map('map', options);
+
+//request to load basemap
+var Esri_NatGeoWorldMap = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}', {
+	attribution: 'Tiles &copy; Esri &mdash; National Geographic, Esri, DeLorme, NAVTEQ, UNEP-WCMC, USGS, NASA, ESA, METI, NRCAN, GEBCO, NOAA, iPC',
+	maxZoom: 16
+}).addTo(map);
+
+//string content to be inserted into a tooltip
+		// var message = 'Beacon Heights!';
+
+//create a Leaflet marker, centered on the map's center.
+		// L.marker(map.getCenter())
+			// .bindTooltip(message) //bind the tooltip and message to the marker
+			// .addTo(map) // add the marker to the map`
+			// .openTooltip(); // open the tooltip
+
+	//var myRoute = L.geoJson(data).addTo(map);
+	//map.fitBounds(myRoute.getBounds());
+
+	var myRoute = L.geoJson(data, {
+	filter : function(feature) {
+		if(feature.geometry.type =="LineString") {
+			return feature;
+		}
+	},
+	style : function(feature) {
+		return {
+			color: "#fc4c02",
+		weight: 6,
+		opacity: 0.90,
+		dashArray: "6, 10"
+	}
+	}
+	}).addTo(map);
+
+	var myStops = L.geoJson(data, {
+
+		filter : function(feature) {
+			if(feature.geometry.type == "Point") {
+				return feature;
+			}
+		},
+
+
+	onEachFeature : function(feature, layer) {
+		layer.bindTooltip("<h3>" + 
+			feature.properties['name'] + "</h3> <p>" +
+				 feature.properties.text
+				 +
+				 "</p");
+		
+	}
+	}).addTo(map);
+
+
+	</script>
+
+</body>
+
+</html>
